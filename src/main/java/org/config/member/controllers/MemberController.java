@@ -31,4 +31,9 @@ public class MemberController {
 
         updateService.process(form);
     }
+
+    @PostMapping("/login")
+    public void login(@RequestBody @Valid RequestLogin form, Errors errors) {
+
+    }
 }
