@@ -17,9 +17,11 @@ public class RequestJoin {
     @NotBlank
     private String name; // 회원명
 
+    @NotBlank
     @Size(min=8)
     private String password; // 비밀번호
 
+    @NotBlank
     private String confirmPassword; // 비밀번호 확인
 
     @AssertTrue
