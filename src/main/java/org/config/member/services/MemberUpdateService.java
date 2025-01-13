@@ -29,9 +29,6 @@ public class MemberUpdateService {
     private final AuthoritiesRepository authoritiesRepository;
     private final PasswordEncoder passwordEncoder;
     private final ModelMapper modelMapper;
-    private final MemberInfoService infoService;
-    private final HttpSession session;
-    private final Utils utils;
 
     /**
      * 커맨드 객체의 타입에 따라서 RequestJoin이면 회원 가입 처리
@@ -60,6 +57,7 @@ public class MemberUpdateService {
 
         save(member, List.of(auth)); // 회원 저장 처리
     }
+
 
     /**
      * 회원정보 추가 또는 수정 처리

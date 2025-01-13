@@ -11,7 +11,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.time.LocalDateTime;
 import java.util.Collection;
 
-@Getter@Setter
+@Getter
+@Setter
 @Builder
 @ToString
 public class MemberInfo implements UserDetails {

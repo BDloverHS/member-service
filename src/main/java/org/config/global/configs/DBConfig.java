@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
 
 @Configuration
-public class DbConfig {
+public class DBConfig {
     @PersistenceContext
     private EntityManager em;
 
