@@ -1,8 +1,8 @@
-package org.config.global.advice;
+package org.config.global.advices;
 
 import lombok.RequiredArgsConstructor;
-import org.config.global.libs.Utils;
 import org.config.global.exceptions.CommonException;
+import org.config.global.libs.Utils;
 import org.config.global.rests.JSONData;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 @RequiredArgsConstructor
-@RestControllerAdvice("org.koreait")
+@RestControllerAdvice("org.config")
 public class CommonControllerAdvice {
 
     private final Utils utils;
