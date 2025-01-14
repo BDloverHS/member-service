@@ -14,7 +14,7 @@ import java.util.List;
 @Configuration
 public class CorsConfig {
     @Value("${cors.allowed}")
-    public String allowedOrigin;
+    private String allowedOrigin;
 
     @Bean
     public CorsFilter corsFilter() {
