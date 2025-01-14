@@ -87,7 +87,7 @@ public class TokenService {
 
         String email = claims.getSubject();
         String authorities = (String) claims.get("authorities");
-        List<SimpleGrantedAuthority> _authorities = Arrays.stream(authorities.split("||")).map(SimpleGrantedAuthority::new).toList();
+        List<SimpleGrantedAuthority> _authorities = Arrays.stream(authorities.split("\\|\\|")).map(SimpleGrantedAuthority::new).toList();
 
         MemberInfo memberInfo = (MemberInfo) infoService.loadUserByUsername(email);
         memberInfo.setAuthorities(_authorities);
@@ -104,7 +104,7 @@ public class TokenService {
         String authHeader = request.getHeader("Authorization");
 
         if (!StringUtils.hasText(authHeader)) {
-            throw new UnAuthorizedException();
+            return null;
         }
 
         String token = authHeader.substring(7);
