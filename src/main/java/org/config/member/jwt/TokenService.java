@@ -1,14 +1,14 @@
 package org.config.member.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.servlet.http.HttpServletRequest;
 import org.config.global.exceptions.UnAuthorizedException;
+import org.config.global.libs.Utils;
 import org.config.member.MemberInfo;
 import org.config.member.services.MemberInfoService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +31,9 @@ public class TokenService {
 
     private final JwtProperties properties;
     private final MemberInfoService infoService;
+
+    @Autowired
+    private Utils utils;
 
     private Key key;
 
@@ -72,6 +75,10 @@ public class TokenService {
      * @return
      */
     public Authentication authenticate(String token) {
+
+        // 토큰 유효성 검사
+        validate(token);
+
         Claims claims = Jwts.parser()
                 .setSigningKey(key)
                 .build()
@@ -93,6 +100,7 @@ public class TokenService {
     }
 
     public Authentication authenticate(HttpServletRequest request) {
+
         String authHeader = request.getHeader("Authorization");
 
         if (!StringUtils.hasText(authHeader)) {
@@ -102,5 +110,36 @@ public class TokenService {
         String token = authHeader.substring(7);
 
         return authenticate(token);
+    }
+
+    /**
+     * 토큰 검증
+     *
+     * @param token
+     */
+    public void validate(String token) {
+        String errorCode = null;
+        Exception error = null;
+
+        try {
+            Jwts.parser().setSigningKey(key).build().parseClaimsJws(token).getPayload();
+        } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+            errorCode = ".JWT.Malformed";
+            error = e;
+        } catch (ExpiredJwtException e) {
+            errorCode = ".JWT.unsupported";
+            error = e;
+        } catch (Exception e) {
+            errorCode = ".JWT.error";
+            error = e;
+        }
+
+        if (StringUtils.hasText(errorCode)) {
+            throw new UnAuthorizedException(utils.getMessage(errorCode));
+        }
+
+        if (error != null) {
+            error.printStackTrace();
+        }
     }
 }
