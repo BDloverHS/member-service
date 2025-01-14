@@ -8,7 +8,9 @@ import org.config.global.rests.JSONData;
 import org.config.member.jwt.TokenService;
 import org.config.member.services.MemberUpdateService;
 import org.config.member.validators.JoinValidator;
+import org.config.member.validators.LoginValidator;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,6 +23,7 @@ public class MemberController {
     private final MemberUpdateService updateService;
     private final JoinValidator joinValidator;
     private final TokenService tokenService;
+    private final LoginValidator loginValidator;
 
     @PostMapping("/join")
     @ResponseStatus(HttpStatus.CREATED)
@@ -44,6 +47,8 @@ public class MemberController {
     @PostMapping("/login")
     public JSONData login(@RequestBody @Valid RequestLogin form, Errors errors) {
 
+        loginValidator.validate(form, errors);
+
         if (errors.hasErrors()) {
             throw new BadRequestException(utils.getErrorMessages(errors));
         }
@@ -52,5 +57,11 @@ public class MemberController {
         String token = tokenService.create(email);
 
         return new JSONData(token);
+    }
+
+    @GetMapping("/test")
+    @PreAuthorize("isAuthenticated()")
+    public void test() {
+        System.out.println("회원 전용 URL");
     }
 }
