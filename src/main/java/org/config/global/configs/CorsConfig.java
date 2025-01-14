@@ -1,20 +1,21 @@
 package org.config.global.configs;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.util.StringUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
-import java.util.Arrays;
-import java.util.List;
-
 @Configuration
 public class CorsConfig {
+<<<<<<< HEAD
     @Value("${cors.allowed}")
     private String allowedOrigin;
+=======
+
+    //@Value("${cors.allowed}")
+    //public List<String> allowedOrigin;
+>>>>>>> parent of 8d94c68 (memberservice 구축)
 
     @Bean
     public CorsFilter corsFilter() {
@@ -25,13 +26,12 @@ public class CorsConfig {
         config.addAllowedMethod("*");
         config.addAllowedHeader("*");
 
-        if (StringUtils.hasText(allowedOrigin)) {
-            List<String> origins = Arrays.stream(allowedOrigin.split(",")).toList();
-            config.setAllowedOrigins(origins);
-            config.setAllowCredentials(true);
-        } else {
+        //if (allowedOrigin == null || allowedOrigin.isEmpty()) {
             config.addAllowedOrigin("*");
-        }
+        //} else {
+        //    config.setAllowedOrigins(allowedOrigin);
+            config.setAllowCredentials(true);
+        //}
 
         source.registerCorsConfiguration("/**", config);
 

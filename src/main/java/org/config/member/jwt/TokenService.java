@@ -10,6 +10,7 @@ import org.config.member.MemberInfo;
 import org.config.member.services.MemberInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -23,6 +24,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Lazy
 @Service
 @EnableConfigurationProperties(JwtProperties.class)
 public class TokenService {
