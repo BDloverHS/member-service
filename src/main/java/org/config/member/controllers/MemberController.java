@@ -1,11 +1,9 @@
 package org.config.member.controllers;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.config.global.exceptions.BadRequestException;
 import org.config.global.libs.Utils;
 import org.config.global.rests.JSONData;
@@ -14,8 +12,8 @@ import org.config.member.jwt.TokenService;
 import org.config.member.services.MemberUpdateService;
 import org.config.member.validators.JoinValidator;
 import org.config.member.validators.LoginValidator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
@@ -70,22 +68,22 @@ public class MemberController {
         if (StringUtils.hasText(frontDomain)){
             String[] domains = frontDomain.split(",");
             for(String domain : domains) {
-                Cookie cookie = new Cookie("token", token);
-                cookie.setPath("/");
-                cookie.setDomain(domain);
-                cookie.setSecure(true);
-                cookie.setHttpOnly(true);
-                response.addCookie(cookie);
+
+                response.setHeader("Set-Cookie", String.format("token=%s; Path=/; Domain=%s; SecureHttpOnly; SameSite=None", token, domain)); // SameSite=None - 다른 서버에서도 쿠키 설정 가능, Https는 필수
             }
         }
 
         return new JSONData(token);
     }
 
-    @GetMapping("/test")
-    @PreAuthorize("isAuthenticated()")
-    public void test(@AuthenticationPrincipal MemberInfo memberInfo) {
-        System.out.println(memberInfo);
-        System.out.println("회원 전용 URL");
+    /**
+     * 로그인한 회원정보 조회
+     *
+     * @param memberInfo
+     * @return
+     */
+    @GetMapping("/")
+    public JSONData info(@AuthenticationPrincipal MemberInfo memberInfo) {
+         return new JSONData(memberInfo.getMember());
     }
 }
