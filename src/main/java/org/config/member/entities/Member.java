@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.ToString;
 import org.config.global.entities.BaseEntity;
+import org.config.member.constants.Authority;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
@@ -41,4 +42,9 @@ public class Member extends BaseEntity implements Serializable {
 
     // 비밀번호 변경 일시
     private LocalDateTime credentialChangedAt;
+
+    public List<Authority> get_authorities() {
+        return authorities == null || authorities.isEmpty() ? List.of()
+                : authorities.stream().map(Authorities::getAuthority).toList();
+    }
 }

@@ -7,6 +7,7 @@ import lombok.ToString;
 import org.config.member.entities.Member;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.Collection;
@@ -15,6 +16,7 @@ import java.util.Collection;
 @Setter
 @Builder
 @ToString
+@Transactional
 public class MemberInfo implements UserDetails {
 
     private String email;
